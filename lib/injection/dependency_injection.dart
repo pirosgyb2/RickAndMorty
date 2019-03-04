@@ -1,6 +1,7 @@
-import '../data/contact_data.dart';
-import '../data/contact_data_impl.dart';
-import '../data/contact_data_mock.dart';
+import 'package:rick_and_morty_app/data/models/character_data.dart';
+import 'package:rick_and_morty_app/data/models/common_data.dart';
+import 'package:rick_and_morty_app/data/repos/character_data_impl.dart';
+import 'package:rick_and_morty_app/data/repos/character_data_mock.dart';
 
 enum Flavor { MOCK, PRO }
 
@@ -18,12 +19,12 @@ class Injector {
 
   Injector._internal();
 
-  ContactRepository get contactRepository {
+  CommonRepository<Character> get characterRepository {
     switch (_flavor) {
       case Flavor.MOCK:
-        return new MockContactRepository();
+        return new MockCharacterRepository();
       default: //Flavor.PRO
-        return new RandomUserRepository();
+        return new CharacterRepository();
     }
   }
 }

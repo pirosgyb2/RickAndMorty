@@ -1,60 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty_app/data/models/character_data.dart';
 
-import '../../data/contact_data.dart';
-import 'contact_presenter.dart';
+import 'character_presenter.dart';
 
-class ContactsPage extends StatelessWidget {
+class CharactersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Contacts"),
+          title: Text("Characters"),
         ),
-        body: ContactList());
+        body: CharacterList());
   }
 }
 
 ///
-///   Contact List
+///   Character List
 ///
 
-class ContactList extends StatefulWidget {
-  ContactList({Key key}) : super(key: key);
+class CharacterList extends StatefulWidget {
+  CharacterList({Key key}) : super(key: key);
 
   @override
-  _ContactListState createState() => _ContactListState();
+  _CharacterListState createState() => _CharacterListState();
 }
 
-class _ContactListState extends State<ContactList>
-    implements ContactListViewContract {
-  ContactListPresenter _presenter;
+class _CharacterListState extends State<CharacterList>
+    implements CharacterListViewContract {
+  CharacterListPresenter _presenter;
 
-  List<Contact> _contacts;
+  List<Character> _characters;
 
   bool _isSearching;
 
-  _ContactListState() {
-    _presenter = ContactListPresenter(this);
+  _CharacterListState() {
+    _presenter = CharacterListPresenter(this);
   }
 
   @override
   void initState() {
     super.initState();
     _isSearching = true;
-    _presenter.loadContacts();
+    _presenter.loadCharacters();
   }
 
   @override
-  void onLoadContactsComplete(List<Contact> items) {
+  void onLoadCharactersComplete(List<Character> items) {
     setState(() {
-      _contacts = items;
+      _characters = items;
       _isSearching = false;
     });
   }
 
   @override
-  void onLoadContactsError() {
-    // TODO: implement onLoadContactsError
+  void onLoadCharactersError() {
+    // TODO: implement onLoadCharactersError
   }
 
   @override
@@ -69,25 +69,27 @@ class _ContactListState extends State<ContactList>
     } else {
       widget = ListView(
           padding: EdgeInsets.symmetric(vertical: 8.0),
-          children: _buildContactList());
+          children: _buildCharacterList());
     }
 
     return widget;
   }
 
-  List<_ContactListItem> _buildContactList() {
-    return _contacts.map((contact) => _ContactListItem(contact)).toList();
+  List<_CharacterListItem> _buildCharacterList() {
+    return _characters
+        .map((character) => _CharacterListItem(character))
+        .toList();
   }
 }
 
 ///
-///   Contact List Item
+///   Character List Item
 ///
 
-class _ContactListItem extends ListTile {
-  _ContactListItem(Contact contact)
+class _CharacterListItem extends ListTile {
+  _CharacterListItem(Character character)
       : super(
-            title: Text(contact.fullName),
-            subtitle: Text(contact.email),
-            leading: CircleAvatar(child: Text(contact.fullName[0])));
+      title: Text(character.name),
+      subtitle: Text(character.species),
+      leading: CircleAvatar(child: Text(character.name[0])));
 }
