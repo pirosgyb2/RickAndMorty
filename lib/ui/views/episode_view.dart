@@ -26,10 +26,9 @@ class EpisodeList extends StatefulWidget {
 class _EpisodeListState extends State<EpisodeList>
     implements ListViewContract<Episode> {
   ListPresenter<Episode> _presenter;
-
   List<Episode> _episodes;
-
   bool _isSearching;
+  bool _isError;
 
   _EpisodeListState() {
     _presenter = ListPresenter<Episode>(this);
@@ -39,6 +38,7 @@ class _EpisodeListState extends State<EpisodeList>
   void initState() {
     super.initState();
     _isSearching = true;
+    _isError = false;
     _presenter.loadItems();
   }
 
@@ -47,27 +47,38 @@ class _EpisodeListState extends State<EpisodeList>
     setState(() {
       _episodes = items;
       _isSearching = false;
+      _isError = false;
     });
   }
 
   @override
-  void onLoadError() {}
+  void onLoadError() {
+    setState(() {
+      _isError = true;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     var widget;
 
-    if (_isSearching) {
+    if (_isError) {
       widget = Center(
           child: Padding(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
-              child: CircularProgressIndicator()));
+              child: Text("Cannot load episodes.")));
     } else {
-      widget = ListView(
-          padding: EdgeInsets.symmetric(vertical: 8.0),
-          children: _buildEpisodesList());
+      if (_isSearching) {
+        widget = Center(
+            child: Padding(
+                padding: EdgeInsets.only(left: 16.0, right: 16.0),
+                child: CircularProgressIndicator()));
+      } else {
+        widget = ListView(
+            padding: EdgeInsets.symmetric(vertical: 8.0),
+            children: _buildEpisodesList());
+      }
     }
-
     return widget;
   }
 
