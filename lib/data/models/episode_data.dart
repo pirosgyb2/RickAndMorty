@@ -23,5 +23,7 @@ class Episode {
         episode = map['episode'],
         characters = map['characters']?.cast<String>(),
         url = map['url'],
-        created = map['created'];
+        created = map['created'] != null
+            ? DateTime.parse(map['created'])
+            : DateTime.now();
 }

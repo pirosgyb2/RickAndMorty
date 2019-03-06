@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
-
-import 'character_presenter.dart';
+import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
 
 class CharactersPage extends StatelessWidget {
   @override
@@ -15,9 +14,7 @@ class CharactersPage extends StatelessWidget {
   }
 }
 
-///
-///   Character List
-///
+// -------- Character List ----------
 
 class CharacterList extends StatefulWidget {
   CharacterList({Key key}) : super(key: key);
@@ -27,26 +24,26 @@ class CharacterList extends StatefulWidget {
 }
 
 class _CharacterListState extends State<CharacterList>
-    implements CharacterListViewContract {
-  CharacterListPresenter _presenter;
+    implements ListViewContract<Character> {
+  ListPresenter<Character> _presenter;
 
   List<Character> _characters;
 
   bool _isSearching;
 
   _CharacterListState() {
-    _presenter = CharacterListPresenter(this);
+    _presenter = ListPresenter<Character>(this);
   }
 
   @override
   void initState() {
     super.initState();
     _isSearching = true;
-    _presenter.loadCharacters();
+    _presenter.loadItems();
   }
 
   @override
-  void onLoadCharactersComplete(List<Character> items) {
+  void onLoadComplete(List<Character> items) {
     setState(() {
       _characters = items;
       _isSearching = false;
@@ -54,9 +51,7 @@ class _CharacterListState extends State<CharacterList>
   }
 
   @override
-  void onLoadCharactersError() {
-    // TODO: implement onLoadCharactersError
-  }
+  void onLoadError() {}
 
   @override
   Widget build(BuildContext context) {
@@ -83,9 +78,7 @@ class _CharacterListState extends State<CharacterList>
   }
 }
 
-///
-///   Character List Item
-///
+// -------- Character List Item ---------
 
 class _CharacterListItem extends ListTile {
   _CharacterListItem(Character character)

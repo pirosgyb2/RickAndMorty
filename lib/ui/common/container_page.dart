@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty_app/module/characters/character_view.dart';
-import 'package:rick_and_morty_app/module/episodes/episode_view.dart';
-import 'package:rick_and_morty_app/module/locations/location_view.dart';
+import 'package:rick_and_morty_app/ui/views/character_view.dart';
+import 'package:rick_and_morty_app/ui/views/episode_view.dart';
+import 'package:rick_and_morty_app/ui/views/location_view.dart';
 
-class CommonPage extends StatefulWidget {
+class ContainerPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return _CommonPageState();
+    return _ContainerPageState();
   }
 }
 
-class _CommonPageState extends State<CommonPage> {
+class _ContainerPageState extends State<ContainerPage> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [

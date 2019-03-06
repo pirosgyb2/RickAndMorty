@@ -40,5 +40,7 @@ class Character {
         imageUrl = map['image'],
         episode = map['episode']?.cast<String>(),
         url = map['url'],
-        created = DateTime.parse(map['created']);
+        created = map['created'] != null
+            ? DateTime.parse(map['created'])
+            : DateTime.now();
 }

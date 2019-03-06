@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty_app/injection/dependency_injection.dart';
-import 'package:rick_and_morty_app/module/common_page.dart';
+import 'package:rick_and_morty_app/ui/common/container_page.dart';
 
 void main() {
-  Injector.configure(Flavor.PRO);
-
   runApp(
     MaterialApp(
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
       ),
-      home: new CommonPage(),
+      home: new ContainerPage(),
     ),
   );
 }

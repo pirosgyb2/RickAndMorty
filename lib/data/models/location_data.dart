@@ -23,5 +23,7 @@ class Location {
         dimension = map['dimension'],
         residents = map['residents']?.cast<String>(),
         url = map['url'],
-        created = map['created'];
+        created = map['created'] != null
+            ? DateTime.parse(map['created'])
+            : DateTime.now();
 }
