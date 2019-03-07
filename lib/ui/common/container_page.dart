@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rick_and_morty_app/ui/views/character_view.dart';
-import 'package:rick_and_morty_app/ui/views/episode_view.dart';
-import 'package:rick_and_morty_app/ui/views/location_view.dart';
+import 'package:rick_and_morty_app/ui/views/character_page_view.dart';
+import 'package:rick_and_morty_app/ui/views/episode_page_view.dart';
+import 'package:rick_and_morty_app/ui/views/location_page_view.dart';
 
 class ContainerPage extends StatefulWidget {
   @override
