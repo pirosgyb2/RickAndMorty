@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
-import 'package:rick_and_morty_app/ui/views/character_detail_view.dart';
+import 'package:rick_and_morty_app/ui/views/details/character_detail_view.dart';
 
 class CharactersPage extends StatelessWidget {
   @override
@@ -98,8 +98,8 @@ class _CharacterListState extends State<CharacterList>
     Navigator.push(
       context,
       MaterialPageRoute<Null>(
-        settings: const RouteSettings(name: CharacterDetailsPage.routeName),
-        builder: (BuildContext context) => CharacterDetailsPage(character),
+        settings: const RouteSettings(name: CharacterDetailPage.routeName),
+        builder: (BuildContext context) => CharacterDetailPage(character),
       ),
     );
   }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/colors.dart';
-import 'package:rick_and_morty_app/data/models/character_data.dart';
 
 class FlexibleAppBar extends SliverAppBar {
   static const double height = 256.0;
@@ -36,15 +35,16 @@ class FlexibleAppBar extends SliverAppBar {
   }
 }
 
-class _CharacterCategoryItem extends StatelessWidget {
+class InfoItem extends StatelessWidget {
   final IconData icon;
   final bool bigPadding;
   final List<String> lines;
 
-  _CharacterCategoryItem({Key key,
-    @required this.icon,
-    @required this.lines,
-    @required this.bigPadding})
+  InfoItem(
+      {Key key,
+      @required this.icon,
+      @required this.lines,
+      @required this.bigPadding})
       : super(key: key);
 
   @override
@@ -62,7 +62,12 @@ class _CharacterCategoryItem extends StatelessWidget {
     final ThemeData themeData = Theme.of(context);
     //final List<Widget> firstColumn = lines.map((line) => Text(line)).toList();
     final List<Widget> firstColumn = <Text>[
-      Text(lines[0]), Text(lines[1], style: TextStyle(color: subtitleGray),)];
+      Text(lines[0]),
+      Text(
+        lines[1],
+        style: TextStyle(color: subtitleGray),
+      )
+    ];
 
     return <Widget>[
       Flexible(
@@ -83,11 +88,11 @@ class _CharacterCategoryItem extends StatelessWidget {
   }
 }
 
-class _CharacterCategory extends StatelessWidget {
+class Info extends StatelessWidget {
   final IconData icon;
-  final List<_CharacterCategoryItem> children;
+  final List<InfoItem> children;
 
-  _CharacterCategory({Key key, this.icon, this.children}) : super(key: key);
+  Info({Key key, this.icon, this.children}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -112,75 +117,8 @@ class _CharacterCategory extends StatelessWidget {
   }
 }
 
-class CharacterDetailsPage extends StatelessWidget {
-  static const String routeName = '/character';
-  final Character _character;
+abstract class DetailPage {
+  Info buildImportantInfoBlock();
 
-  const CharacterDetailsPage(this._character);
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: ThemeData(
-        brightness: Brightness.light,
-        //primarySwatch: _character.species...
-      ),
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            FlexibleAppBar(_character.name, _character.imageUrl),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                <_CharacterCategory>[
-                  _buildImportantDataCategory(),
-                  _buildCategory(Icons.home, Icons.arrow_forward,
-                      <String>[_character.origin.name, "Origin"]),
-                  _buildCategory(Icons.location_on, Icons.arrow_forward,
-                      <String>[_character.location.name, "Location"]),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-
-  _CharacterCategory _buildImportantDataCategory() {
-    return _CharacterCategory(
-      icon: Icons.accessibility,
-      children: <_CharacterCategoryItem>[
-        _CharacterCategoryItem(
-            icon: null,
-            lines: <String>[_character.gender, "Gender"],
-            bigPadding: false),
-        _CharacterCategoryItem(
-            icon: null,
-            lines: <String>[_character.species, "Spieces"],
-            bigPadding: false),
-        _CharacterCategoryItem(
-            icon: null,
-            lines: <String>[_character.type, "Type"],
-            bigPadding: false),
-        _CharacterCategoryItem(
-            icon: null,
-            lines: <String>[_character.status, "Status"],
-            bigPadding: false),
-      ],
-    );
-  }
-
-  _CharacterCategory _buildCategory(
-      IconData categoryIcon, IconData categoryItemIcon, List<String> lines) {
-    return _CharacterCategory(
-      icon: categoryIcon,
-      children: <_CharacterCategoryItem>[
-        _CharacterCategoryItem(
-          icon: categoryItemIcon,
-          lines: lines,
-          bigPadding: true,
-        ),
-      ],
-    );
-  }
+  Info buildSingleInfo(IconData icon, IconData itemIcon, List<String> lines);
 }
