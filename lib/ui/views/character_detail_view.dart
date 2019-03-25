@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rick_and_morty_app/colors.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
 
 class FlexibleAppBar extends SliverAppBar {
@@ -9,7 +10,9 @@ class FlexibleAppBar extends SliverAppBar {
             pinned: true,
             expandedHeight: height,
             flexibleSpace: FlexibleSpaceBar(
-                title: Text(title), background: _buildBackground(imageUrl)));
+              title: Text(title),
+              background: _buildBackground(imageUrl),
+            ));
 
   static Widget _buildBackground(String imageUrl) {
     return Stack(
@@ -35,15 +38,19 @@ class FlexibleAppBar extends SliverAppBar {
 
 class _CharacterCategoryItem extends StatelessWidget {
   final IconData icon;
+  final bool bigPadding;
   final List<String> lines;
 
-  _CharacterCategoryItem({Key key, @required this.icon, @required this.lines})
+  _CharacterCategoryItem({Key key,
+    @required this.icon,
+    @required this.lines,
+    @required this.bigPadding})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      padding: EdgeInsets.symmetric(vertical: bigPadding ? 16.0 : 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: _buildRow(context),
@@ -53,7 +60,9 @@ class _CharacterCategoryItem extends StatelessWidget {
 
   List<Widget> _buildRow(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    final List<Widget> firstColumn = lines.map((line) => Text(line)).toList();
+    //final List<Widget> firstColumn = lines.map((line) => Text(line)).toList();
+    final List<Widget> firstColumn = <Text>[
+      Text(lines[0]), Text(lines[1], style: TextStyle(color: subtitleGray),)];
 
     return <Widget>[
       Flexible(
@@ -104,7 +113,7 @@ class _CharacterCategory extends StatelessWidget {
 }
 
 class CharacterDetailsPage extends StatelessWidget {
-  static const String routeName = '/charatcer';
+  static const String routeName = '/character';
   final Character _character;
 
   const CharacterDetailsPage(this._character);
@@ -121,11 +130,15 @@ class CharacterDetailsPage extends StatelessWidget {
           slivers: [
             FlexibleAppBar(_character.name, _character.imageUrl),
             SliverList(
-              delegate: SliverChildListDelegate(<_CharacterCategory>[
-                _buildPersonalCategory(),
-                _buildCategory(Icons.location_on, Icons.map,
-                    <String>[_character.location.name]),
-              ]),
+              delegate: SliverChildListDelegate(
+                <_CharacterCategory>[
+                  _buildImportantDataCategory(),
+                  _buildCategory(Icons.home, Icons.arrow_forward,
+                      <String>[_character.origin.name, "Origin"]),
+                  _buildCategory(Icons.location_on, Icons.arrow_forward,
+                      <String>[_character.location.name, "Location"]),
+                ],
+              ),
             )
           ],
         ),
@@ -133,14 +146,26 @@ class CharacterDetailsPage extends StatelessWidget {
     );
   }
 
-  _CharacterCategory _buildPersonalCategory() {
+  _CharacterCategory _buildImportantDataCategory() {
     return _CharacterCategory(
-      icon: Icons.person,
+      icon: Icons.accessibility,
       children: <_CharacterCategoryItem>[
-        _CharacterCategoryItem(icon: null, lines: <String>[_character.gender]),
-        _CharacterCategoryItem(icon: null, lines: <String>[_character.species]),
-        _CharacterCategoryItem(icon: null, lines: <String>[_character.type]),
-        _CharacterCategoryItem(icon: null, lines: <String>[_character.status]),
+        _CharacterCategoryItem(
+            icon: null,
+            lines: <String>[_character.gender, "Gender"],
+            bigPadding: false),
+        _CharacterCategoryItem(
+            icon: null,
+            lines: <String>[_character.species, "Spieces"],
+            bigPadding: false),
+        _CharacterCategoryItem(
+            icon: null,
+            lines: <String>[_character.type, "Type"],
+            bigPadding: false),
+        _CharacterCategoryItem(
+            icon: null,
+            lines: <String>[_character.status, "Status"],
+            bigPadding: false),
       ],
     );
   }
@@ -150,7 +175,11 @@ class CharacterDetailsPage extends StatelessWidget {
     return _CharacterCategory(
       icon: categoryIcon,
       children: <_CharacterCategoryItem>[
-        _CharacterCategoryItem(icon: categoryItemIcon, lines: lines),
+        _CharacterCategoryItem(
+          icon: categoryItemIcon,
+          lines: lines,
+          bigPadding: true,
+        ),
       ],
     );
   }
