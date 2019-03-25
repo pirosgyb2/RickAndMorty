@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
+import 'package:rick_and_morty_app/ui/views/details/location_detail_view.dart';
 
 class LocationsPage extends StatelessWidget {
   @override
@@ -83,16 +84,30 @@ class _LocationListState extends State<LocationList>
   }
 
   List<_LocationListItem> _buildLocationList() {
-    return _locations.map((location) => _LocationListItem(location)).toList();
+    return _locations.map((location) =>
+        _LocationListItem(location: location, onTap: () {
+          _showLocationDetailsPage(context, location);
+        })).toList();
+  }
+
+  void _showLocationDetailsPage(BuildContext context, Location location) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<Null>(
+        settings: const RouteSettings(name: LocationDetailPage.routeName),
+        builder: (BuildContext context) => LocationDetailPage(location),
+      ),
+    );
   }
 }
 
 // -------- Location List Item ---------
 
 class _LocationListItem extends ListTile {
-  _LocationListItem(Location location)
+  _LocationListItem({Location location, GestureTapCallback onTap})
       : super(
             title: Text(location.name),
             subtitle: Text(location.type),
-            leading: CircleAvatar(child: Text(location.name[0])));
+      leading: CircleAvatar(child: Text(location.name[0])),
+      onTap: onTap);
 }

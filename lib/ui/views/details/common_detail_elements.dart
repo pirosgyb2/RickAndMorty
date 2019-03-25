@@ -60,7 +60,6 @@ class InfoItem extends StatelessWidget {
 
   List<Widget> _buildRow(BuildContext context) {
     final ThemeData themeData = Theme.of(context);
-    //final List<Widget> firstColumn = lines.map((line) => Text(line)).toList();
     final List<Widget> firstColumn = <Text>[
       Text(lines[0]),
       Text(

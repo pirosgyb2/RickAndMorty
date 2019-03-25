@@ -23,10 +23,7 @@ class LocationDetailPage extends StatelessWidget implements DetailPage {
               delegate: SliverChildListDelegate(
                 <Info>[
                   buildImportantInfoBlock(),
-//                  buildSingleInfo(Icons.home, Icons.arrow_forward,
-//                      <String>[_location.origin.name, "Origin"]),
-//                  buildSingleInfo(Icons.location_on, Icons.arrow_forward,
-//                      <String>[_character.location.name, "Location"]),
+                  buildResidentsBlock(),
                 ],
               ),
             )
@@ -38,13 +35,55 @@ class LocationDetailPage extends StatelessWidget implements DetailPage {
 
   @override
   Info buildImportantInfoBlock() {
-    // TODO: implement buildImportantInfoBlock
-    return null;
+    return Info(
+      icon: Icons.location_city,
+      children: <InfoItem>[
+        InfoItem(
+            icon: null,
+            lines: <String>[_location.type, "Type"],
+            bigPadding: false),
+        InfoItem(
+            icon: null,
+            lines: <String>[_location.dimension, "Dimenson"],
+            bigPadding: false),
+      ],
+    );
+  }
+
+  Info buildResidentsBlock() {
+    List<InfoItem> infoItems = <InfoItem>[
+      InfoItem(
+        icon: null,
+        lines: <String>["", "Residents"],
+        bigPadding: false,
+      ),
+    ];
+
+    infoItems.addAll(_location.residents
+        .map((residentURL) =>
+        InfoItem(
+          icon: null,
+          lines: <String>[residentURL, ""],
+          bigPadding: false,
+        ))
+        .toList());
+    return Info(
+      icon: Icons.person,
+      children: infoItems,
+    );
   }
 
   @override
   Info buildSingleInfo(IconData icon, IconData itemIcon, List<String> lines) {
-    // TODO: implement buildSingleInfo
-    return null;
+    return Info(
+      icon: icon,
+      children: <InfoItem>[
+        InfoItem(
+          icon: itemIcon,
+          lines: lines,
+          bigPadding: true,
+        ),
+      ],
+    );
   }
 }
