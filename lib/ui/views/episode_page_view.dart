@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/episode_data.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
+import 'package:rick_and_morty_app/ui/views/details/episode_detail_view.dart';
 
 class EpisodesPage extends StatelessWidget {
   @override
@@ -83,16 +84,30 @@ class _EpisodeListState extends State<EpisodeList>
   }
 
   List<_EpisodesListItem> _buildEpisodesList() {
-    return _episodes.map((episode) => _EpisodesListItem(episode)).toList();
+    return _episodes.map((episode) =>
+        _EpisodesListItem(episode: episode, onTap: () {
+          _showEpisodeDetailsPage(context, episode);
+        },)).toList();
+  }
+
+  void _showEpisodeDetailsPage(BuildContext context, Episode episode) {
+    Navigator.push(
+      context,
+      MaterialPageRoute<Null>(
+        settings: const RouteSettings(name: EpisodeDetailPage.routeName),
+        builder: (BuildContext context) => EpisodeDetailPage(episode),
+      ),
+    );
   }
 }
 
 // -------- Episode List Item ---------
 
 class _EpisodesListItem extends ListTile {
-  _EpisodesListItem(Episode episode)
+  _EpisodesListItem({Episode episode, GestureTapCallback onTap})
       : super(
             title: Text(episode.name),
             subtitle: Text(episode.episode),
-            leading: CircleAvatar(child: Text(episode.name[0])));
+      leading: CircleAvatar(child: Text(episode.name[0])),
+      onTap: onTap);
 }
