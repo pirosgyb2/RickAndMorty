@@ -16,7 +16,7 @@ class Episode {
       this.url,
       this.created});
 
-  Episode.fromMap(Map<String, dynamic> map)
+  Episode.fromJson(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],
         airDate = map['air_date'],

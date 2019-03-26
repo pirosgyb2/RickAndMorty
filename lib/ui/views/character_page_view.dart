@@ -26,8 +26,12 @@ class CharacterList extends StatefulWidget {
 
 class _CharacterListState extends State<CharacterList>
     implements ListViewContract<Character> {
+
+  final ScrollController scrollController = new ScrollController();
+  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+
   ListPresenter<Character> _presenter;
-  List<Character> _characters;
+  List<Character> _characters = new List<Character>();
   bool _isSearching;
   bool _isError;
 
@@ -44,9 +48,16 @@ class _CharacterListState extends State<CharacterList>
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void onLoadComplete(List<Character> items) {
     setState(() {
-      _characters = items;
+      loadMoreStatus = LoadMoreStatus.STABLE;
+      _characters.addAll(items);
       _isSearching = false;
       _isError = false;
     });
@@ -75,9 +86,12 @@ class _CharacterListState extends State<CharacterList>
                 padding: EdgeInsets.only(left: 16.0, right: 16.0),
                 child: CircularProgressIndicator()));
       } else {
-        widget = ListView(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            children: _buildCharacterList());
+        widget = NotificationListener(
+            onNotification: _onNotification,
+            child: ListView(
+                controller: scrollController,
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                children: _buildCharacterList()));
       }
     }
     return widget;
@@ -102,6 +116,21 @@ class _CharacterListState extends State<CharacterList>
         builder: (BuildContext context) => CharacterDetailPage(character),
       ),
     );
+  }
+
+  bool _onNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      if (scrollController.position.maxScrollExtent > scrollController.offset &&
+          scrollController.position.maxScrollExtent - scrollController.offset <=
+              50) {
+        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
+          loadMoreStatus = LoadMoreStatus.LOADING;
+          _presenter.loadItems();
+        }
+        ;
+      }
+    }
+    return true;
   }
 }
 

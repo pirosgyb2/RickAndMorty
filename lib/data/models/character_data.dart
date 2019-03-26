@@ -28,15 +28,15 @@ class Character {
       this.url,
       this.created});
 
-  Character.fromMap(Map<String, dynamic> map)
+  Character.fromJson(Map<String, dynamic> map)
       : id = map['id'],
         name = map['name'],
         status = map['status'],
         species = map['species'],
         type = map['type'],
         gender = map['gender'],
-        origin = Location.fromMap(map['origin']),
-        location = Location.fromMap(map['location']),
+        origin = Location.fromJson(map['origin']),
+        location = Location.fromJson(map['location']),
         imageUrl = map['image'],
         episode = map['episode']?.cast<String>(),
         url = map['url'],
