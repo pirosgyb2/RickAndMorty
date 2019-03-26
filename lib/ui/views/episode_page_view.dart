@@ -27,9 +27,12 @@ class EpisodeList extends StatefulWidget {
 class _EpisodeListState extends State<EpisodeList>
     implements ListViewContract<Episode> {
   ListPresenter<Episode> _presenter;
-  List<Episode> _episodes;
+  List<Episode> _episodes = new List<Episode>();
   bool _isSearching;
   bool _isError;
+
+  final ScrollController scrollController = new ScrollController();
+  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
 
   _EpisodeListState() {
     _presenter = ListPresenter<Episode>(this);
@@ -44,9 +47,16 @@ class _EpisodeListState extends State<EpisodeList>
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void onLoadComplete(List<Episode> items) {
     setState(() {
-      _episodes = items;
+      loadMoreStatus = LoadMoreStatus.STABLE;
+      _episodes.addAll(items);
       _isSearching = false;
       _isError = false;
     });
@@ -75,9 +85,12 @@ class _EpisodeListState extends State<EpisodeList>
                 padding: EdgeInsets.only(left: 16.0, right: 16.0),
                 child: CircularProgressIndicator()));
       } else {
-        widget = ListView(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            children: _buildEpisodesList());
+        widget = NotificationListener(
+            onNotification: _onNotification,
+            child: ListView(
+                controller: scrollController,
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                children: _buildEpisodesList()));
       }
     }
     return widget;
@@ -98,6 +111,21 @@ class _EpisodeListState extends State<EpisodeList>
         builder: (BuildContext context) => EpisodeDetailPage(episode),
       ),
     );
+  }
+
+  bool _onNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      if (scrollController.position.maxScrollExtent > scrollController.offset &&
+          scrollController.position.maxScrollExtent - scrollController.offset <=
+              50) {
+        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
+          loadMoreStatus = LoadMoreStatus.LOADING;
+          _presenter.loadItems();
+        }
+        ;
+      }
+    }
+    return true;
   }
 }
 

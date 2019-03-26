@@ -26,8 +26,12 @@ class LocationList extends StatefulWidget {
 
 class _LocationListState extends State<LocationList>
     implements ListViewContract<Location> {
+
+  final ScrollController scrollController = new ScrollController();
+  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+
   ListPresenter<Location> _presenter;
-  List<Location> _locations;
+  List<Location> _locations = new List<Location>();
   bool _isSearching;
   bool _isError;
 
@@ -44,9 +48,16 @@ class _LocationListState extends State<LocationList>
   }
 
   @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   void onLoadComplete(List<Location> items) {
     setState(() {
-      _locations = items;
+      loadMoreStatus = LoadMoreStatus.STABLE;
+      _locations.addAll(items);
       _isSearching = false;
       _isError = false;
     });
@@ -75,9 +86,12 @@ class _LocationListState extends State<LocationList>
                 padding: EdgeInsets.only(left: 16.0, right: 16.0),
                 child: CircularProgressIndicator()));
       } else {
-        widget = ListView(
-            padding: EdgeInsets.symmetric(vertical: 8.0),
-            children: _buildLocationList());
+        widget = NotificationListener(
+            onNotification: _onNotification,
+            child: ListView(
+                controller: scrollController,
+                padding: EdgeInsets.symmetric(vertical: 8.0),
+                children: _buildLocationList()));
       }
     }
     return widget;
@@ -98,6 +112,21 @@ class _LocationListState extends State<LocationList>
         builder: (BuildContext context) => LocationDetailPage(location),
       ),
     );
+  }
+
+  bool _onNotification(ScrollNotification notification) {
+    if (notification is ScrollUpdateNotification) {
+      if (scrollController.position.maxScrollExtent > scrollController.offset &&
+          scrollController.position.maxScrollExtent - scrollController.offset <=
+              50) {
+        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
+          loadMoreStatus = LoadMoreStatus.LOADING;
+          _presenter.loadItems();
+        }
+        ;
+      }
+    }
+    return true;
   }
 }
 
