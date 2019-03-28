@@ -9,17 +9,19 @@ import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/data/models/result_info_data.dart';
 
 class Repository<T> {
-  String _apiUri = 'https://rickandmortyapi.com/api/';
-  final JsonDecoder _decoder = new JsonDecoder();
+  String apiUri = 'https://rickandmortyapi.com/api/';
+  final JsonDecoder decoder = new JsonDecoder();
   ResultInfo responseInfo = new ResultInfo(nextURL: "this is the first page");
 
   Repository() {
-    _specifyUri();
+    specifyUri();
   }
 
-  Future<List<T>> fetch(int pageNumber) async {
+  Future<T> fetchOne(String uri) {}
+
+  Future<List<T>> fetchList(int pageNumber) async {
     updateURIpagenumber(pageNumber);
-    final response = await http.get(_apiUri);
+    final response = await http.get(apiUri);
     final jsonBody = response.body;
     final statusCode = response.statusCode;
 
@@ -28,7 +30,7 @@ class Repository<T> {
           "Error while getting items [StatusCode:$statusCode, Error:${response
               .reasonPhrase}]");
     }
-    final container = _decoder.convert(jsonBody);
+    final container = decoder.convert(jsonBody);
     final List items = container['results'];
 
     responseInfo = ResultInfo.fromJson(container['info']);
@@ -36,19 +38,21 @@ class Repository<T> {
     return _getItems(items);
   }
 
-  void _specifyUri() {
+  void specifyUri() {
     switch (T) {
       case (Character):
-        _apiUri = _apiUri + 'character';
+        apiUri = apiUri + 'character';
         break;
       case (Episode):
-        _apiUri = _apiUri + 'episode';
+        apiUri = apiUri + 'episode';
         break;
       case (Location):
-        _apiUri = _apiUri + 'location';
+        apiUri = apiUri + 'location';
         break;
     }
   }
+
+  T getItem(dynamic container) {}
 
   List<T> _getItems(List items) {
     switch (T) {
@@ -68,12 +72,11 @@ class Repository<T> {
   }
 
   void updateURIpagenumber(int pageNumber) {
-    if (_apiUri.contains("/?page=", 0)) {
-      _apiUri = _apiUri.replaceRange(
-          _apiUri.indexOf('=') + 1, _apiUri.length, pageNumber.toString());
-    }
-    else {
-      _apiUri = _apiUri + "/?page=" + pageNumber.toString();
+    if (apiUri.contains("/?page=", 0)) {
+      apiUri = apiUri.replaceRange(
+          apiUri.indexOf('=') + 1, apiUri.length, pageNumber.toString());
+    } else {
+      apiUri = apiUri + "/?page=" + pageNumber.toString();
     }
   }
 }

@@ -32,7 +32,7 @@ class _EpisodeListState extends State<EpisodeList>
   bool _isError;
 
   final ScrollController scrollController = new ScrollController();
-  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+  LoadMorePageStatus loadMoreStatus = LoadMorePageStatus.STABLE;
 
   _EpisodeListState() {
     _presenter = ListPresenter<Episode>(this);
@@ -55,7 +55,7 @@ class _EpisodeListState extends State<EpisodeList>
   @override
   void onLoadComplete(List<Episode> items) {
     setState(() {
-      loadMoreStatus = LoadMoreStatus.STABLE;
+      loadMoreStatus = LoadMorePageStatus.STABLE;
       _episodes.addAll(items);
       _isSearching = false;
       _isError = false;
@@ -118,8 +118,9 @@ class _EpisodeListState extends State<EpisodeList>
       if (scrollController.position.maxScrollExtent > scrollController.offset &&
           scrollController.position.maxScrollExtent - scrollController.offset <=
               50) {
-        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
-          loadMoreStatus = LoadMoreStatus.LOADING;
+        if (loadMoreStatus != null &&
+            loadMoreStatus == LoadMorePageStatus.STABLE) {
+          loadMoreStatus = LoadMorePageStatus.LOADING;
           _presenter.loadItems();
         }
         ;

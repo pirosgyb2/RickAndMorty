@@ -28,7 +28,7 @@ class _LocationListState extends State<LocationList>
     implements ListViewContract<Location> {
 
   final ScrollController scrollController = new ScrollController();
-  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+  LoadMorePageStatus loadMoreStatus = LoadMorePageStatus.STABLE;
 
   ListPresenter<Location> _presenter;
   List<Location> _locations = new List<Location>();
@@ -56,7 +56,7 @@ class _LocationListState extends State<LocationList>
   @override
   void onLoadComplete(List<Location> items) {
     setState(() {
-      loadMoreStatus = LoadMoreStatus.STABLE;
+      loadMoreStatus = LoadMorePageStatus.STABLE;
       _locations.addAll(items);
       _isSearching = false;
       _isError = false;
@@ -119,8 +119,9 @@ class _LocationListState extends State<LocationList>
       if (scrollController.position.maxScrollExtent > scrollController.offset &&
           scrollController.position.maxScrollExtent - scrollController.offset <=
               50) {
-        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
-          loadMoreStatus = LoadMoreStatus.LOADING;
+        if (loadMoreStatus != null &&
+            loadMoreStatus == LoadMorePageStatus.STABLE) {
+          loadMoreStatus = LoadMorePageStatus.LOADING;
           _presenter.loadItems();
         }
         ;

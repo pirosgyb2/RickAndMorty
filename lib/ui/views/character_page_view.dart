@@ -28,7 +28,7 @@ class _CharacterListState extends State<CharacterList>
     implements ListViewContract<Character> {
 
   final ScrollController scrollController = new ScrollController();
-  LoadMoreStatus loadMoreStatus = LoadMoreStatus.STABLE;
+  LoadMorePageStatus loadMoreStatus = LoadMorePageStatus.STABLE;
 
   ListPresenter<Character> _presenter;
   List<Character> _characters = new List<Character>();
@@ -56,7 +56,7 @@ class _CharacterListState extends State<CharacterList>
   @override
   void onLoadComplete(List<Character> items) {
     setState(() {
-      loadMoreStatus = LoadMoreStatus.STABLE;
+      loadMoreStatus = LoadMorePageStatus.STABLE;
       _characters.addAll(items);
       _isSearching = false;
       _isError = false;
@@ -123,8 +123,9 @@ class _CharacterListState extends State<CharacterList>
       if (scrollController.position.maxScrollExtent > scrollController.offset &&
           scrollController.position.maxScrollExtent - scrollController.offset <=
               50) {
-        if (loadMoreStatus != null && loadMoreStatus == LoadMoreStatus.STABLE) {
-          loadMoreStatus = LoadMoreStatus.LOADING;
+        if (loadMoreStatus != null &&
+            loadMoreStatus == LoadMorePageStatus.STABLE) {
+          loadMoreStatus = LoadMorePageStatus.LOADING;
           _presenter.loadItems();
         }
         ;

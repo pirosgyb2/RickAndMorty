@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/colors.dart';
+import 'package:rick_and_morty_app/data/models/character_data.dart';
+import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
+import 'package:rick_and_morty_app/ui/common/one_presenters.dart';
 
 class FlexibleAppBar extends SliverAppBar {
   static const double height = 256.0;
@@ -35,17 +38,47 @@ class FlexibleAppBar extends SliverAppBar {
   }
 }
 
-class InfoItem extends StatelessWidget {
+class InfoItem extends StatefulWidget implements ViewContract<Character> {
   final IconData icon;
   final bool bigPadding;
-  final List<String> lines;
+  List<String> lines;
+  _InfoItemStateFulState state;
+  OneCharacterPresenter _characterPresenter;
 
   InfoItem(
-      {Key key,
-      @required this.icon,
-      @required this.lines,
-      @required this.bigPadding})
-      : super(key: key);
+      {@required this.icon, @required this.lines, @required this.bigPadding}) {
+    _characterPresenter = new OneCharacterPresenter(this);
+  }
+
+  @override
+  State<StatefulWidget> createState() {
+    state = _InfoItemStateFulState(
+        icon: icon, bigPadding: bigPadding, lines: lines);
+    return state;
+  }
+
+  void loadItem() {
+    _characterPresenter.loadItem(lines[0]);
+  }
+
+  @override
+  void onLoadComplete(Character character) {
+    state.updateLines(character);
+  }
+
+  @override
+  void onLoadError() {
+    // TODO: implement onLoadError
+  }
+}
+
+class _InfoItemStateFulState extends State<InfoItem> {
+  final IconData icon;
+  final bool bigPadding;
+  List<String> lines;
+
+  _InfoItemStateFulState(
+      {@required this.icon, @required this.lines, @required this.bigPadding}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +89,12 @@ class InfoItem extends StatelessWidget {
         children: _buildRow(context),
       ),
     );
+  }
+
+  void updateLines(Character character) {
+    setState(() {
+      lines = <String>[character.name, character.species];
+    });
   }
 
   List<Widget> _buildRow(BuildContext context) {
@@ -89,7 +128,7 @@ class InfoItem extends StatelessWidget {
 
 class Info extends StatelessWidget {
   final IconData icon;
-  final List<InfoItem> children;
+  List<InfoItem> children;
 
   Info({Key key, this.icon, this.children}) : super(key: key);
 

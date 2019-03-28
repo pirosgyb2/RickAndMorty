@@ -2,11 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/ui/views/details/common_detail_elements.dart';
 
-class LocationDetailPage extends StatelessWidget implements DetailPage {
+class LocationDetailPage extends StatefulWidget {
   static const String routeName = '/location';
   final Location _location;
 
   const LocationDetailPage(this._location);
+
+  @override
+  _LocationDetailPageState createState() => _LocationDetailPageState(_location);
+}
+
+class _LocationDetailPageState extends State<LocationDetailPage>
+    implements DetailPage {
+  final Location _location;
+
+  List<InfoItem> _residentInfoItems = new List<InfoItem>();
+
+  Info _residentsInfo = new Info(icon: Icons.person);
+
+  _LocationDetailPageState(this._location) {}
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +65,7 @@ class LocationDetailPage extends StatelessWidget implements DetailPage {
   }
 
   Info buildResidentsBlock() {
-    List<InfoItem> infoItems = <InfoItem>[
+    _residentInfoItems = <InfoItem>[
       InfoItem(
         icon: null,
         lines: <String>["", "Residents"],
@@ -59,7 +73,7 @@ class LocationDetailPage extends StatelessWidget implements DetailPage {
       ),
     ];
 
-    infoItems.addAll(_location.residents
+    _residentInfoItems.addAll(_location.residents
         .map((residentURL) =>
         InfoItem(
           icon: null,
@@ -67,10 +81,14 @@ class LocationDetailPage extends StatelessWidget implements DetailPage {
           bigPadding: false,
         ))
         .toList());
-    return Info(
-      icon: Icons.person,
-      children: infoItems,
-    );
+
+    // 1-tol kezdve h a 'Residents' feliraton ne hívja meg
+    for (int i = 1; i < _residentInfoItems.length; i++) {
+      _residentInfoItems[i].loadItem();
+    }
+
+    _residentsInfo.children = _residentInfoItems;
+    return _residentsInfo;
   }
 
   @override
