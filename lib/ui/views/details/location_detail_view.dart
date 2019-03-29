@@ -16,10 +16,6 @@ class _LocationDetailPageState extends State<LocationDetailPage>
     implements DetailPage {
   final Location _location;
 
-  List<InfoItem> _residentInfoItems = new List<InfoItem>();
-
-  Info _residentsInfo = new Info(icon: Icons.person);
-
   _LocationDetailPageState(this._location) {}
 
   @override
@@ -65,7 +61,7 @@ class _LocationDetailPageState extends State<LocationDetailPage>
   }
 
   Info buildResidentsBlock() {
-    _residentInfoItems = <InfoItem>[
+    List<InfoItem> infoItems = <InfoItem>[
       InfoItem(
         icon: null,
         lines: <String>["", "Residents"],
@@ -73,22 +69,24 @@ class _LocationDetailPageState extends State<LocationDetailPage>
       ),
     ];
 
-    _residentInfoItems.addAll(_location.residents
+    infoItems.addAll(_location.residents
         .map((residentURL) =>
         InfoItem(
-          icon: null,
+          icon: Icons.arrow_forward,
           lines: <String>[residentURL, ""],
           bigPadding: false,
         ))
         .toList());
 
     // 1-tol kezdve h a 'Residents' feliraton ne hívja meg
-    for (int i = 1; i < _residentInfoItems.length; i++) {
-      _residentInfoItems[i].loadItem();
+    for (int i = 1; i < infoItems.length; i++) {
+      infoItems[i].loadItem();
     }
 
-    _residentsInfo.children = _residentInfoItems;
-    return _residentsInfo;
+    return Info(
+      icon: Icons.accessibility,
+      children: infoItems,
+    );
   }
 
   @override

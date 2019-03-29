@@ -61,11 +61,17 @@ class EpisodeDetailPage extends StatelessWidget implements DetailPage {
 
     infoItems.addAll(_episode.characters
         .map((characterURL) => InfoItem(
-              icon: null,
+      icon: Icons.arrow_forward,
               lines: <String>[characterURL, ""],
               bigPadding: false,
             ))
         .toList());
+
+    // 1-tol kezdve h a 'Residents' feliraton ne hívja meg
+    for (int i = 1; i < infoItems.length; i++) {
+      infoItems[i].loadItem();
+    }
+
     return Info(
       icon: Icons.person,
       children: infoItems,
