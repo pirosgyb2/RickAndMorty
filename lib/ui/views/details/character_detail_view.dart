@@ -23,9 +23,9 @@ class CharacterDetailPage extends StatelessWidget implements DetailPage {
               delegate: SliverChildListDelegate(
                 <Info>[
                   buildImportantInfoBlock(),
-                  buildSingleInfo(Icons.home, Icons.arrow_forward,
+                  buildSingleInfo(Icons.home, null,
                       <String>[_character.origin.name, "Origin"]),
-                  buildSingleInfo(Icons.location_on, Icons.arrow_forward,
+                  buildSingleInfo(Icons.location_on, null,
                       <String>[_character.location.name, "Location"]),
                 ],
               ),

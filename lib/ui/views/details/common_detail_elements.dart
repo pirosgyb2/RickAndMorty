@@ -3,6 +3,7 @@ import 'package:rick_and_morty_app/colors.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
 import 'package:rick_and_morty_app/ui/common/one_presenters.dart';
+import 'package:rick_and_morty_app/ui/views/details/character_detail_view.dart';
 
 class FlexibleAppBar extends SliverAppBar {
   static const double height = 256.0;
@@ -42,7 +43,7 @@ class InfoItem extends StatefulWidget implements ViewContract<Character> {
   final IconData icon;
   final bool bigPadding;
   List<String> lines;
-  _InfoItemStateFulState state;
+  _InfoItemState state;
   OneCharacterPresenter _characterPresenter;
 
   InfoItem(
@@ -52,8 +53,11 @@ class InfoItem extends StatefulWidget implements ViewContract<Character> {
 
   @override
   State<StatefulWidget> createState() {
-    state = _InfoItemStateFulState(
-        icon: icon, bigPadding: bigPadding, lines: lines);
+    state = _InfoItemState(
+      icon: icon,
+      bigPadding: bigPadding,
+      lines: lines,
+    );
     return state;
   }
 
@@ -72,13 +76,17 @@ class InfoItem extends StatefulWidget implements ViewContract<Character> {
   }
 }
 
-class _InfoItemStateFulState extends State<InfoItem> {
+class _InfoItemState extends State<InfoItem> {
   final IconData icon;
   final bool bigPadding;
   List<String> lines;
+  Character character;
 
-  _InfoItemStateFulState(
-      {@required this.icon, @required this.lines, @required this.bigPadding}) {}
+  _InfoItemState({
+    @required this.icon,
+    @required this.lines,
+    @required this.bigPadding,
+  }) {}
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +101,7 @@ class _InfoItemStateFulState extends State<InfoItem> {
 
   void updateLines(Character character) {
     setState(() {
+      this.character = character;
       lines = <String>[character.name, character.species];
     });
   }
@@ -119,10 +128,25 @@ class _InfoItemStateFulState extends State<InfoItem> {
         child: IconButton(
           icon: Icon(icon),
           color: themeData.primaryColor,
-          onPressed: () => {},
+          onPressed: () =>
+          {
+          _showCharacterDetailsPage(context, character)
+          },
         ),
       ),
     ];
+  }
+
+  _showCharacterDetailsPage(BuildContext context, Character character) {
+    if (character != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute<Null>(
+          settings: const RouteSettings(name: CharacterDetailPage.routeName),
+          builder: (BuildContext context) => CharacterDetailPage(character),
+        ),
+      );
+    }
   }
 }
 
