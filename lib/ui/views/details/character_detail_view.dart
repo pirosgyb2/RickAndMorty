@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
+import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/ui/views/details/common_detail_elements.dart';
 
 class CharacterDetailPage extends StatelessWidget implements DetailPage {
@@ -23,10 +24,16 @@ class CharacterDetailPage extends StatelessWidget implements DetailPage {
               delegate: SliverChildListDelegate(
                 <Info>[
                   buildImportantInfoBlock(),
-                  buildSingleInfo(Icons.home, null,
-                      <String>[_character.origin.name, "Origin"]),
-                  buildSingleInfo(Icons.location_on, null,
-                      <String>[_character.location.name, "Location"]),
+                  _buildSingleInfo(
+                      Icons.home,
+                      Icons.arrow_forward,
+                      <String>[_character.origin.name, "Origin"],
+                      _character.origin),
+                  _buildSingleInfo(
+                      Icons.location_on,
+                      Icons.arrow_forward,
+                      <String>[_character.location.name, "Last Location"],
+                      _character.location),
                 ],
               ),
             )
@@ -62,8 +69,11 @@ class CharacterDetailPage extends StatelessWidget implements DetailPage {
   }
 
   @override
-  Info buildSingleInfo(
-      IconData categoryIcon, IconData categoryItemIcon, List<String> lines) {
+  Info buildSingleInfo(IconData categoryIcon, IconData categoryItemIcon,
+      List<String> lines) {}
+
+  Info _buildSingleInfo(IconData categoryIcon, IconData categoryItemIcon,
+      List<String> lines, Location location) {
     return Info(
       icon: categoryIcon,
       children: <InfoItem>[
@@ -71,6 +81,7 @@ class CharacterDetailPage extends StatelessWidget implements DetailPage {
           icon: categoryItemIcon,
           lines: lines,
           bigPadding: true,
+          location: location,
         ),
       ],
     );

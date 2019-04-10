@@ -1,22 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/data/models/location_data.dart';
+import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
+import 'package:rick_and_morty_app/ui/common/one_presenters.dart';
 import 'package:rick_and_morty_app/ui/views/details/common_detail_elements.dart';
 
 class LocationDetailPage extends StatefulWidget {
   static const String routeName = '/location';
   final Location _location;
+  final bool shouldDownloadAllData;
 
-  const LocationDetailPage(this._location);
+  const LocationDetailPage(this._location, {this.shouldDownloadAllData});
 
   @override
-  _LocationDetailPageState createState() => _LocationDetailPageState(_location);
+  _LocationDetailPageState createState() =>
+      _LocationDetailPageState(
+          _location, shouldDownloadAllData: shouldDownloadAllData);
 }
 
 class _LocationDetailPageState extends State<LocationDetailPage>
-    implements DetailPage {
-  final Location _location;
+    implements DetailPage, ViewContract<Location> {
+  Location _location;
+  final bool shouldDownloadAllData;
+  List<String> type; //TODO: ezekkel kell kezdeni valamit szerintem
+  List<String> dimension;
+  List<String> residents;
+  List<InfoItem> children;
 
-  _LocationDetailPageState(this._location) {}
+  _LocationDetailPageState(this._location, {this.shouldDownloadAllData}) {
+    if (shouldDownloadAllData != null && shouldDownloadAllData) {
+      new OneLocationPresenter(this).loadItem(_location.url);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +59,26 @@ class _LocationDetailPageState extends State<LocationDetailPage>
 
   @override
   Info buildImportantInfoBlock() {
+    children = <InfoItem>[
+      InfoItem(
+          icon: null,
+          lines: <String>[
+            _location.type == null ? "Unknown" : _location.type,
+            "Type"
+          ],
+          bigPadding: false),
+      InfoItem(
+          icon: null,
+          lines: <String>[
+            _location.dimension == null ? "Unknown" : _location.dimension,
+            "Dimenson"
+          ],
+          bigPadding: false),
+    ];
+
     return Info(
       icon: Icons.location_city,
-      children: <InfoItem>[
-        InfoItem(
-            icon: null,
-            lines: <String>[_location.type, "Type"],
-            bigPadding: false),
-        InfoItem(
-            icon: null,
-            lines: <String>[_location.dimension, "Dimenson"],
-            bigPadding: false),
-      ],
+      children: children,
     );
   }
 
@@ -69,18 +91,20 @@ class _LocationDetailPageState extends State<LocationDetailPage>
       ),
     ];
 
-    infoItems.addAll(_location.residents
-        .map((residentURL) =>
-        InfoItem(
-          icon: Icons.arrow_forward,
-          lines: <String>[residentURL, ""],
-          bigPadding: false,
-        ))
-        .toList());
+    if (_location.residents != null) {
+      infoItems.addAll(_location.residents
+          .map((residentURL) =>
+          InfoItem(
+            icon: Icons.arrow_forward,
+            lines: <String>[residentURL, ""],
+            bigPadding: false,
+          ))
+          .toList());
 
-    // 1-tol kezdve h a 'Residents' feliraton ne hívja meg
-    for (int i = 1; i < infoItems.length; i++) {
-      infoItems[i].loadItem();
+      // 1-tol kezdve h a 'Residents' feliraton ne hívja meg
+      for (int i = 1; i < infoItems.length; i++) {
+        infoItems[i].loadItem();
+      }
     }
 
     return Info(
@@ -102,4 +126,25 @@ class _LocationDetailPageState extends State<LocationDetailPage>
       ],
     );
   }
+
+  @override
+  void onLoadComplete(Location location) {
+    setState(() {
+      children[0].changeLines(<String>[
+        location.type == null ? "Unknown" : location.type,
+        "Type"
+      ]);
+
+      children[1].changeLines(<String>[
+        location.dimension == null ? "Unknown" : location.dimension,
+        "Dimenson"
+      ]);
+
+      _location = location;
+      build(context);
+    });
+  }
+
+  @override
+  void onLoadError() {}
 }

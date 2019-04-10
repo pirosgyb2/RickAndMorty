@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty_app/colors.dart';
 import 'package:rick_and_morty_app/data/models/character_data.dart';
+import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
 import 'package:rick_and_morty_app/ui/common/one_presenters.dart';
 import 'package:rick_and_morty_app/ui/views/details/character_detail_view.dart';
+import 'package:rick_and_morty_app/ui/views/details/location_detail_view.dart';
 
 class FlexibleAppBar extends SliverAppBar {
   static const double height = 256.0;
@@ -45,20 +47,26 @@ class InfoItem extends StatefulWidget implements ViewContract<Character> {
   List<String> lines;
   _InfoItemState state;
   OneCharacterPresenter _characterPresenter;
+  final Location location;
 
-  InfoItem(
-      {@required this.icon, @required this.lines, @required this.bigPadding}) {
+  InfoItem({
+    @required this.icon,
+    @required this.lines,
+    @required this.bigPadding,
+    this.location,
+  }) {
     _characterPresenter = new OneCharacterPresenter(this);
   }
 
   @override
   State<StatefulWidget> createState() {
     state = _InfoItemState(
-      icon: icon,
-      bigPadding: bigPadding,
-      lines: lines,
-    );
+        icon: icon, bigPadding: bigPadding, lines: lines, location: location);
     return state;
+  }
+
+  void changeLines(List<String> lines) {
+    state.changeLines(lines);
   }
 
   void loadItem() {
@@ -81,12 +89,12 @@ class _InfoItemState extends State<InfoItem> {
   final bool bigPadding;
   List<String> lines;
   Character character;
+  Location location;
 
-  _InfoItemState({
-    @required this.icon,
+  _InfoItemState({@required this.icon,
     @required this.lines,
     @required this.bigPadding,
-  }) {}
+    this.location}) {}
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +105,12 @@ class _InfoItemState extends State<InfoItem> {
         children: _buildRow(context),
       ),
     );
+  }
+
+  void changeLines(List<String> lines) {
+    setState(() {
+      this.lines = lines;
+    });
   }
 
   void updateLines(Character character) {
@@ -130,20 +144,29 @@ class _InfoItemState extends State<InfoItem> {
           color: themeData.primaryColor,
           onPressed: () =>
           {
-          _showCharacterDetailsPage(context, character)
+          _showDetailsPage(context, character)
           },
         ),
       ),
     ];
   }
 
-  _showCharacterDetailsPage(BuildContext context, Character character) {
+  _showDetailsPage(BuildContext context, Character character) {
     if (character != null) {
       Navigator.push(
         context,
         MaterialPageRoute<Null>(
           settings: const RouteSettings(name: CharacterDetailPage.routeName),
           builder: (BuildContext context) => CharacterDetailPage(character),
+        ),
+      );
+    } else if (location != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute<Null>(
+          settings: const RouteSettings(name: LocationDetailPage.routeName),
+          builder: (BuildContext context) =>
+              LocationDetailPage(location, shouldDownloadAllData: true),
         ),
       );
     }
