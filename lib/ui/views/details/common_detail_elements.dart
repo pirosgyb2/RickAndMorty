@@ -70,7 +70,7 @@ class InfoItem extends StatefulWidget implements ViewContract<Character> {
   }
 
   void loadItem() {
-    _characterPresenter.loadItem(lines[0]);
+    _characterPresenter.loadItem(lines[2]);
   }
 
   @override

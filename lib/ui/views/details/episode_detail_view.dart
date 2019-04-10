@@ -62,7 +62,7 @@ class EpisodeDetailPage extends StatelessWidget implements DetailPage {
     infoItems.addAll(_episode.characters
         .map((characterURL) => InfoItem(
       icon: Icons.arrow_forward,
-              lines: <String>[characterURL, ""],
+      lines: <String>["Loading...", "", characterURL],
               bigPadding: false,
             ))
         .toList());

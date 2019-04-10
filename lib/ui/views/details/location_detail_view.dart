@@ -96,7 +96,7 @@ class _LocationDetailPageState extends State<LocationDetailPage>
           .map((residentURL) =>
           InfoItem(
             icon: Icons.arrow_forward,
-            lines: <String>[residentURL, ""],
+            lines: <String>["Loading...", "", residentURL],
             bigPadding: false,
           ))
           .toList());
