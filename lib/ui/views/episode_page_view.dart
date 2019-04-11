@@ -9,6 +9,15 @@ class EpisodesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Episodes"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context, delegate: CustomSearchDelegate<Episode>(),);
+            },
+          ),
+        ],
       ),
       body: EpisodeList(),
     );

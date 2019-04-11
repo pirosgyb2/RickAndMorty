@@ -4,6 +4,7 @@ import 'package:rick_and_morty_app/data/models/location_data.dart';
 import 'package:rick_and_morty_app/injection/dependency_injection.dart';
 import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
 
+//TODO: most ezek nincsenek is hasznalva?
 class OneCharacterPresenter extends OnePresenter<Character> {
   OneCharacterPresenter(ViewContract<Character> view) {
     super.view = view;

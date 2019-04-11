@@ -1,46 +1,38 @@
+import 'package:rick_and_morty_app/data/models/basic_data.dart';
 import 'package:rick_and_morty_app/data/models/location_data.dart';
 
-class Character {
-  final int id;
-  final String name;
-  final String status;
-  final String species;
-  final String type;
-  final String gender;
-  final Location origin;
-  final Location location;
-  final String imageUrl;
-  final List<String> episode;
-  final String url;
-  final DateTime created;
+class Character extends BasicData {
+  String status;
+  String species;
+  String type;
+  String gender;
+  Location origin;
+  Location location;
+  String imageUrl;
+  List<String> episode;
 
-  const Character(
-      {this.id,
-      this.name,
-      this.status,
-      this.species,
-      this.type,
-      this.gender,
-      this.origin,
-      this.location,
-      this.imageUrl,
-      this.episode,
-      this.url,
-      this.created});
+  Character({int id,
+    String name,
+    this.status,
+    this.species,
+    this.type,
+    this.gender,
+    this.origin,
+    this.location,
+    this.imageUrl,
+    this.episode,
+    String url,
+    DateTime created})
+      : super(id: id, name: name, url: url, created: created);
 
-  Character.fromJson(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        status = map['status'],
-        species = map['species'],
-        type = map['type'],
-        gender = map['gender'],
-        origin = Location.fromJson(map['origin']),
-        location = Location.fromJson(map['location']),
-        imageUrl = map['image'],
-        episode = map['episode']?.cast<String>(),
-        url = map['url'],
-        created = map['created'] != null
-            ? DateTime.parse(map['created'])
-            : DateTime.now();
+  Character.fromJson(Map<String, dynamic> map) : super.fromJson(map) {
+    status = map['status'];
+    species = map['species'];
+    type = map['type'];
+    gender = map['gender'];
+    origin = Location.fromJson(map['origin']);
+    location = Location.fromJson(map['location']);
+    imageUrl = map['image'];
+    episode = map['episode']?.cast<String>();
+  }
 }

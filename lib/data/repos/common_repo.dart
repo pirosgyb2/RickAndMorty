@@ -17,10 +17,10 @@ class Repository<T> {
     specifyUri();
   }
 
-  Future<T> fetchOne(String uri) {}
+  Future<T> fetchOne(String uri) {} //TODO: ez itt megkene legyen irva, nem?
 
   Future<List<T>> fetchList(int pageNumber) async {
-    updateURIpagenumber(pageNumber);
+    updateURIpageNumber(pageNumber);
     final response = await http.get(apiUri);
     final jsonBody = response.body;
     final statusCode = response.statusCode;
@@ -34,6 +34,24 @@ class Repository<T> {
     final List items = container['results'];
 
     responseInfo = ResultInfo.fromJson(container['info']);
+
+    return _getItems(items);
+  }
+
+  Future<List<T>> search(String query) async {
+    final response = await http.get(apiUri + "/?name=" + query);
+    final jsonBody = response.body;
+    final statusCode = response.statusCode;
+
+    if (statusCode < 200 || statusCode >= 300 || jsonBody == null) {
+      throw new FetchDataException(
+          "Error while getting items [StatusCode:$statusCode, Error:${response
+              .reasonPhrase}]");
+    }
+    final container = decoder.convert(jsonBody);
+    final List items = container['results'];
+
+    // responseInfo = ResultInfo.fromJson(container['info']);
 
     return _getItems(items);
   }
@@ -71,7 +89,7 @@ class Repository<T> {
     }
   }
 
-  void updateURIpagenumber(int pageNumber) {
+  void updateURIpageNumber(int pageNumber) {
     if (apiUri.contains("/?page=", 0)) {
       apiUri = apiUri.replaceRange(
           apiUri.indexOf('=') + 1, apiUri.length, pageNumber.toString());

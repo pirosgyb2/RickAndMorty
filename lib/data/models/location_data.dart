@@ -1,29 +1,22 @@
-class Location {
-  final int id;
-  final String name;
-  final String type;
-  final String dimension;
-  final List<String> residents;
-  final String url;
-  final DateTime created;
+import 'package:rick_and_morty_app/data/models/basic_data.dart';
 
-  const Location(
-      {this.id,
-      this.name,
+class Location extends BasicData {
+  String type;
+  String dimension;
+  List<String> residents;
+
+  Location({int id,
+    String name,
       this.type,
       this.dimension,
       this.residents,
-      this.url,
-      this.created});
+    String url,
+    DateTime created})
+      : super(id: id, name: name, url: url, created: created);
 
-  Location.fromJson(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        type = map['type'],
-        dimension = map['dimension'],
-        residents = map['residents']?.cast<String>(),
-        url = map['url'],
-        created = map['created'] != null
-            ? DateTime.parse(map['created'])
-            : DateTime.now();
+  Location.fromJson(Map<String, dynamic> map) : super.fromJson(map) {
+    type = map['type'];
+    dimension = map['dimension'];
+    residents = map['residents']?.cast<String>();
+  }
 }

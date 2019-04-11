@@ -9,6 +9,15 @@ class CharactersPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Characters"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context, delegate: CustomSearchDelegate<Character>(),);
+            },
+          ),
+        ],
       ),
       body: CharacterList(),
     );
@@ -26,7 +35,6 @@ class CharacterList extends StatefulWidget {
 
 class _CharacterListState extends State<CharacterList>
     implements ListViewContract<Character> {
-
   final ScrollController scrollController = new ScrollController();
   LoadMorePageStatus loadMoreStatus = LoadMorePageStatus.STABLE;
 

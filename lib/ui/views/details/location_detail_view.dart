@@ -4,7 +4,7 @@ import 'package:rick_and_morty_app/ui/common/common_presenter.dart';
 import 'package:rick_and_morty_app/ui/common/one_presenters.dart';
 import 'package:rick_and_morty_app/ui/views/details/common_detail_elements.dart';
 
-class LocationDetailPage extends StatefulWidget {
+class LocationDetailPage extends StatefulWidget implements DetailPage {
   static const String routeName = '/location';
   final Location _location;
   final bool shouldDownloadAllData;
@@ -15,6 +15,16 @@ class LocationDetailPage extends StatefulWidget {
   _LocationDetailPageState createState() =>
       _LocationDetailPageState(
           _location, shouldDownloadAllData: shouldDownloadAllData);
+
+  @override
+  Info buildImportantInfoBlock() {
+    return null;
+  }
+
+  @override
+  Info buildSingleInfo(IconData icon, IconData itemIcon, List<String> lines) {
+    return null;
+  }
 }
 
 class _LocationDetailPageState extends State<LocationDetailPage>

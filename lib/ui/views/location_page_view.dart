@@ -9,6 +9,15 @@ class LocationsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Locations"),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                context: context, delegate: CustomSearchDelegate<Location>(),);
+            },
+          ),
+        ],
       ),
       body: LocationList(),
     );

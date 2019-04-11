@@ -1,29 +1,22 @@
-class Episode {
-  final int id;
-  final String name;
-  final String airDate;
-  final String episode;
-  final List<String> characters;
-  final String url;
-  final DateTime created;
+import 'package:rick_and_morty_app/data/models/basic_data.dart';
 
-  const Episode(
-      {this.id,
-      this.name,
+class Episode extends BasicData {
+  String airDate;
+  String episode;
+  List<String> characters;
+
+  Episode({int id,
+    String name,
       this.airDate,
       this.episode,
       this.characters,
-      this.url,
-      this.created});
+    String url,
+    DateTime created})
+      : super(id: id, name: name, url: url, created: created);
 
-  Episode.fromJson(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        airDate = map['air_date'],
-        episode = map['episode'],
-        characters = map['characters']?.cast<String>(),
-        url = map['url'],
-        created = map['created'] != null
-            ? DateTime.parse(map['created'])
-            : DateTime.now();
+  Episode.fromJson(Map<String, dynamic> map) : super.fromJson(map) {
+    airDate = map['air_date'];
+    episode = map['episode'];
+    characters = map['characters']?.cast<String>();
+  }
 }
