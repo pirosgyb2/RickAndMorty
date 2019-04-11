@@ -14,7 +14,11 @@ class CharacterDetailPage extends StatelessWidget implements DetailPage {
     return Theme(
       data: ThemeData(
         brightness: Brightness.light,
-        //primarySwatch: _character.species...
+        primarySwatch: Colors.red,
+        // cardColor: Colors.red,
+        // scaffoldBackgroundColor: Colors.red,
+        // canvasColor: Colors.red,
+
       ),
       child: Scaffold(
         body: CustomScrollView(

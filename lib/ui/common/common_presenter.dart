@@ -166,7 +166,7 @@ class _SearchResultListState<T extends BasicData>
       widget = Center(
           child: Padding(
               padding: EdgeInsets.only(left: 16.0, right: 16.0),
-              child: Text("Cannot load results.")));
+              child: Text("There are no results.")));
     } else {
       if (_isSearching) {
         widget = Center(

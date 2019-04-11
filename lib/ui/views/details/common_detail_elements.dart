@@ -14,6 +14,7 @@ class FlexibleAppBar extends SliverAppBar {
       : super(
             pinned: true,
             expandedHeight: height,
+      backgroundColor: Colors.red,
             flexibleSpace: FlexibleSpaceBar(
               title: Text(title),
               background: _buildBackground(imageUrl),
@@ -121,7 +122,8 @@ class _InfoItemState extends State<InfoItem> {
   }
 
   List<Widget> _buildRow(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
+    final ThemeData themeData = Theme.of(context).copyWith(
+        primaryColor: Colors.red);
     final List<Widget> firstColumn = <Text>[
       Text(lines[0]),
       Text(
@@ -181,7 +183,9 @@ class Info extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = Theme.of(context);
+    final ThemeData themeData = Theme.of(context).copyWith(
+        primaryColor: Colors.red);
+
 
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
