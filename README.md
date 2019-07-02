@@ -5,7 +5,7 @@
 
 
 
-### What is this app?
+
 A Flutter app to show data from [Rick and Morty API](https://rickandmortyapi.com/).
 
 I did this project to get familiar with Flutter and learn the basics.
