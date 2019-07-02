@@ -1,4 +1,4 @@
 # Rick and Morty App
 
-A simple Flutter app to get data from Rick and Morty API.
+A Flutter app to show data from Rick and Morty API.
 
