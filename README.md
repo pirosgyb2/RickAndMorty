@@ -35,5 +35,5 @@ I did this project to get familiar with Flutter and learn the basics.
 * MDC elements for the UI
 * Stateless and stateful widgets
 * Paging with list scrolling
-* async data loading for actors/residents list in detail pages
-* communicate with an API
+* Async data loading for actors/residents list in detail pages
+* Communication with the API
