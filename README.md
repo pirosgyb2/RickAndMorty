@@ -31,7 +31,7 @@ I did this project to get familiar with Flutter and learn the basics.
 * Navigate between detail pages (with clickable detail elements)
 * Search any character, episode or location
 
-### Techniques/elements I used:
+### Techniques/libraries I used:
 * MDC elements for the UI
 * Stateless and stateful widgets
 * Paging with list scrolling
